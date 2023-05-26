@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="crazycolaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="almacen">
+    <Key>
+      <PropertyRef Name="almacen_id" />
+    </Key>
+    <Property Name="almacen_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="direccion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ciudad_id" Type="Int32" />
+    <NavigationProperty Name="ciudad" Relationship="Self.FK__almacen__ciudad___29572725" FromRole="almacen" ToRole="ciudad" />
+    <NavigationProperty Name="almacen_producto" Relationship="Self.FK__almacen_p__almac__30F848ED" FromRole="almacen" ToRole="almacen_producto" />
+    <NavigationProperty Name="usuario" Relationship="Self.FK__usuario__almacen__2C3393D0" FromRole="almacen" ToRole="usuario" />
+  </EntityType>
+  <EntityType Name="almacen_producto">
+    <Key>
+      <PropertyRef Name="almacen_id" />
+      <PropertyRef Name="producto_id" />
+    </Key>
+    <Property Name="almacen_id" Type="Int32" Nullable="false" />
+    <Property Name="producto_id" Type="Int32" Nullable="false" />
+    <Property Name="cantidad" Type="Int32" />
+    <NavigationProperty Name="almacen" Relationship="Self.FK__almacen_p__almac__30F848ED" FromRole="almacen_producto" ToRole="almacen" />
+    <NavigationProperty Name="producto" Relationship="Self.FK__almacen_p__produ__31EC6D26" FromRole="almacen_producto" ToRole="producto" />
+  </EntityType>
+  <EntityType Name="ciudad">
+    <Key>
+      <PropertyRef Name="ciudad_id" />
+    </Key>
+    <Property Name="ciudad_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="pais_id" Type="Int32" />
+    <NavigationProperty Name="almacen" Relationship="Self.FK__almacen__ciudad___29572725" FromRole="ciudad" ToRole="almacen" />
+    <NavigationProperty Name="pais" Relationship="Self.FK__ciudad__pais_id__267ABA7A" FromRole="ciudad" ToRole="pais" />
+  </EntityType>
+  <EntityType Name="pais">
+    <Key>
+      <PropertyRef Name="pais_id" />
+    </Key>
+    <Property Name="pais_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="codigo_iso" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ciudad" Relationship="Self.FK__ciudad__pais_id__267ABA7A" FromRole="pais" ToRole="ciudad" />
+  </EntityType>
+  <EntityType Name="producto">
+    <Key>
+      <PropertyRef Name="producto_id" />
+    </Key>
+    <Property Name="producto_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="precio" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="stock" Type="Int32" />
+    <NavigationProperty Name="almacen_producto" Relationship="Self.FK__almacen_p__produ__31EC6D26" FromRole="producto" ToRole="almacen_producto" />
+  </EntityType>
+  <EntityType Name="usuario">
+    <Key>
+      <PropertyRef Name="usuario_id" />
+    </Key>
+    <Property Name="usuario_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="correo_electronico" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="contrasena" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="is_administrador" Type="Boolean" />
+    <Property Name="almacen_id" Type="Int32" />
+    <NavigationProperty Name="almacen" Relationship="Self.FK__usuario__almacen__2C3393D0" FromRole="usuario" ToRole="almacen" />
+  </EntityType>
+  <Association Name="FK__almacen__ciudad___29572725">
+    <End Role="ciudad" Type="Self.ciudad" Multiplicity="0..1" />
+    <End Role="almacen" Type="Self.almacen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ciudad">
+        <PropertyRef Name="ciudad_id" />
+      </Principal>
+      <Dependent Role="almacen">
+        <PropertyRef Name="ciudad_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__almacen_p__almac__30F848ED">
+    <End Role="almacen" Type="Self.almacen" Multiplicity="1" />
+    <End Role="almacen_producto" Type="Self.almacen_producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="almacen">
+        <PropertyRef Name="almacen_id" />
+      </Principal>
+      <Dependent Role="almacen_producto">
+        <PropertyRef Name="almacen_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__usuario__almacen__2C3393D0">
+    <End Role="almacen" Type="Self.almacen" Multiplicity="0..1" />
+    <End Role="usuario" Type="Self.usuario" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="almacen">
+        <PropertyRef Name="almacen_id" />
+      </Principal>
+      <Dependent Role="usuario">
+        <PropertyRef Name="almacen_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__almacen_p__produ__31EC6D26">
+    <End Role="producto" Type="Self.producto" Multiplicity="1" />
+    <End Role="almacen_producto" Type="Self.almacen_producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="producto">
+        <PropertyRef Name="producto_id" />
+      </Principal>
+      <Dependent Role="almacen_producto">
+        <PropertyRef Name="producto_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ciudad__pais_id__267ABA7A">
+    <End Role="pais" Type="Self.pais" Multiplicity="0..1" />
+    <End Role="ciudad" Type="Self.ciudad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pais">
+        <PropertyRef Name="pais_id" />
+      </Principal>
+      <Dependent Role="ciudad">
+        <PropertyRef Name="pais_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="crazycolaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="almacen" EntityType="Self.almacen" />
+    <EntitySet Name="almacen_producto" EntityType="Self.almacen_producto" />
+    <EntitySet Name="ciudad" EntityType="Self.ciudad" />
+    <EntitySet Name="pais" EntityType="Self.pais" />
+    <EntitySet Name="producto" EntityType="Self.producto" />
+    <EntitySet Name="usuario" EntityType="Self.usuario" />
+    <AssociationSet Name="FK__almacen__ciudad___29572725" Association="Self.FK__almacen__ciudad___29572725">
+      <End Role="ciudad" EntitySet="ciudad" />
+      <End Role="almacen" EntitySet="almacen" />
+    </AssociationSet>
+    <AssociationSet Name="FK__almacen_p__almac__30F848ED" Association="Self.FK__almacen_p__almac__30F848ED">
+      <End Role="almacen" EntitySet="almacen" />
+      <End Role="almacen_producto" EntitySet="almacen_producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK__usuario__almacen__2C3393D0" Association="Self.FK__usuario__almacen__2C3393D0">
+      <End Role="almacen" EntitySet="almacen" />
+      <End Role="usuario" EntitySet="usuario" />
+    </AssociationSet>
+    <AssociationSet Name="FK__almacen_p__produ__31EC6D26" Association="Self.FK__almacen_p__produ__31EC6D26">
+      <End Role="producto" EntitySet="producto" />
+      <End Role="almacen_producto" EntitySet="almacen_producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ciudad__pais_id__267ABA7A" Association="Self.FK__ciudad__pais_id__267ABA7A">
+      <End Role="pais" EntitySet="pais" />
+      <End Role="ciudad" EntitySet="ciudad" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
